@@ -1,11 +1,11 @@
 # Teste de Conhecimentos - SUPERO
 
-###Pergunta Um
+### Pergunta Um
 Escreva um programa que imprima números de 1 a 100. Mas, para múltiplos de 3 imprima "Fizz" em vez do número e para múltiplos de 5 imprima "Buzz". Para números múltiplos de ambos (3 e 5), imprima "FizzBuzz".
 
 Resposta: `./pergunta-um`
 
-###Pergunta Dois
+### Pergunta Dois
 Refatore o código abaixo, fazendo as alterações que julgar necessário.
 ```php
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
@@ -19,7 +19,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 
 Resposta: `./pergunta-dois`
 
-###Pergunta Três
+### Pergunta Três
 Refatore o código abaixo, fazendo as alterações que julgar necessário.
 ```php
 class MyUserClass
@@ -40,7 +40,7 @@ class MyUserClass
 
 Resposta: `./pergunta-tres`
 
-###Pergunta Quarto
+### Pergunta Quarto
 Desenvolva uma API Rest para um sistema gerenciador de tarefas (inclusão/alteração/exclusão). As tarefas consistem em título e descrição, ordenadas por prioridade.
 
 Desenvolver utilizando:
