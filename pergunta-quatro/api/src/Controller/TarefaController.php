@@ -21,6 +21,10 @@ class TarefaController {
     public function processRequest()
     {
         switch ($this->requestMethod) {
+            case 'OPTIONS':
+                $response['status_code_header'] = 'HTTP/1.1 200 OK';
+                return $response;
+                break;
             case 'GET':
                 if ($this->id) {
                     $response = $this->find($this->id);
@@ -118,10 +122,15 @@ class TarefaController {
 
     private function validateTarefa($input)
     {
-        if (! isset($input['titulo'])) {
+        if (!isset($input['titulo'])) {
             return false;
         }
-        if (! isset($input['descricao'])) {
+
+        if (!isset($input['descricao'])) {
+            return false;
+        }
+
+        if (trim($input['titulo']) == '' || trim($input['descricao']) == '') {
             return false;
         }
         
@@ -130,7 +139,7 @@ class TarefaController {
 
     private function unprocessableEntityResponse()
     {
-        $response['status_code_header'] = 'HTTP/1.1 422 Unprocessable Entity';
+        $response['status_code_header'] = 'HTTP/1.1 500 Internal Server Error';
         $response['body'] = json_encode([
             'error' => 'Invalid input'
         ]);

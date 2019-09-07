@@ -2,20 +2,27 @@
     <div class="row">
         <div class="columns">
             <div class="column">
-                <div class="field is-grouped" v-for="(tarefa, index) in tarefas">
-                    <p class="control">
-                        <a class="button is-rounded is-small check-button" @click="check(index)">
-                            <span class="icon is-small"></span>
-                        </a>
-                    </p>
-                    <p class="control is-expanded" :class="{'checked': tarefa.checked}">{{tarefa.description}}</p>
-                    <p class="control">
-                        <a class="button is-danger is-small" @click="remover(index)">
-                            <span class="icon is-small">
-                                <i class="fa fa-trash"></i>
-                            </span>
-                        </a>
-                    </p>
+                <div v-for="(tarefa, index) in tarefas">
+                    <div class="field is-grouped">
+                        <p class="control">
+                            <a class="button is-rounded is-small check-button" @click="check(index)">
+                                <span class="icon is-small"></span>
+                            </a>
+                        </p>
+                        <p class="control is-expanded" :class="{'checked': tarefa.checked == 'Y'}">
+                            <b>{{tarefa.titulo}}</b>
+                            <br>
+                            {{tarefa.descricao}}
+                        </p>
+                        <p class="control">
+                            <a class="button is-danger is-small" @click="remover(index, tarefa.id)">
+                                <span class="icon is-small">
+                                    <i class="fa fa-trash"></i>
+                                </span>
+                            </a>
+                        </p>
+                    </div>
+                    <hr>
                 </div>
             </div>
         </div>
@@ -33,8 +40,8 @@ export default {
         check(index) {
             this.$emit('check', index)
         },
-        remover(index) {
-            this.$emit('remover', index)
+        remover(indexArray, idTarefa) {
+            this.$emit('remover', {index: indexArray, id: idTarefa})
         }
     }
 }

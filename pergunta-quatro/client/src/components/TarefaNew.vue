@@ -2,18 +2,27 @@
     <div class="row">
         <div class="columns">
             <div class="column  is-half is-offset-one-quarter">
-                <div class="field is-grouped">
-                    <p class="control is-expanded">
-                        <input class="input is-primary has-text-centered" type="text" placeholder="Nova tarefa..." v-model="tarefa">
-                    </p>
-                    <p class="control">
-                        <a class="button is-success add-button" @click="enviarTarefa">
-                            <span class="icon is-small">
-                                <i class="fa fa-plus"></i>
-                            </span>
-                        </a>
-                    </p>
-                </div>
+                <fieldset>
+  
+                    <div class="field">
+                        <div class="control">
+                            <input class="input" type="text" placeholder="Titulo" v-model="titulo">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <input class="input" type="email" placeholder="Descrição" v-model="descricao">
+                        </div>
+                    </div>
+
+                    <a class="button is-success" @click="enviarTarefa">
+                        <span class="icon">
+                            <i class="fa fa-plus"></i>
+                        </span>
+                    </a>
+
+                </fieldset>
             </div>
         </div>
     </div>
@@ -24,15 +33,17 @@ export default {
     name: 'tarefa-new',
     data () {
         return {
-            tarefa: ''
+            titulo: '',
+            descricao: ''
         }
     },
     methods: {
         enviarTarefa() {
             if (this.tarefa != '') {
-                this.$emit('novaTarefa', this.tarefa)
+                this.$emit('novaTarefa', {titulo: this.titulo, descricao: this.descricao})
             }
-            this.tarefa = ''
+            this.titulo = ''
+            this.descricao = ''
         }
     }
 }

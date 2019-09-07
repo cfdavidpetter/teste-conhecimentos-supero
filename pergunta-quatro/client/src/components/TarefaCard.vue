@@ -29,29 +29,55 @@ export default {
         TarefaNew,
         TarefaList
     },
-    data () {
-    return {
+    data() {
+        return {
             dias: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
             meses: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
             tarefas: []
         }
     },
+    mounted() {
+        this.axios.get('http://localhost:8000/tarefa/')
+            .then((response) => {
+                this.tarefas = response.data
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    },
     computed: {
         hoje: function() {
-        let novaData = new Date()
+            let novaData = new Date()
             return `${this.dias[novaData.getDay()]}, ${novaData.getDate()} de ${this.meses[novaData.getMonth()]}`
         }
     },
     methods: {
         adicionarTarefa(tarefa) {
-            let nova_tarefa = {'description': tarefa, 'checked': false}
-            this.tarefas.push(nova_tarefa)
+            let nova_tarefa = {'titulo': tarefa.titulo, 'descricao': tarefa.descricao, 'checked': false}
+            this.axios.post('http://localhost:8000/tarefa/', nova_tarefa)
+                .then((response) => {
+                    this.tarefas.push(nova_tarefa)
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
         },
         checkTarefa(index) {
-            this.tarefas[index]['checked'] = !this.tarefas[index]['checked']
+            if (this.tarefas[index]['checked'] == 'Y') {
+                this.tarefas[index]['checked'] = 'N'
+            } else {
+                this.tarefas[index]['checked'] = 'Y'
+            }
         },
-        removerTarefa(index){
-            this.tarefas.splice(index,1)
+        removerTarefa(tarefa){
+            console.log(tarefa);
+            this.axios.delete('http://localhost:8000/tarefa/' + tarefa.id)
+                .then((response) => {
+                    this.tarefas.splice(tarefa.index, 1)
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
         }
     }
 }
