@@ -4,19 +4,13 @@
             <div class="column">
                 <div v-for="(tarefa, index) in tarefas">
                     <div class="field is-grouped">
-                        <p class="control">
-                            <a class="button is-rounded is-small check-button" @click="check(index)">
-                                <span class="icon is-small"></span>
-                            </a>
-                        </p>
                         <p class="control is-expanded" :class="{'checked': tarefa.checked == 'Y'}">
                             <b>{{tarefa.titulo}}</b>
                             <br>
-                            {{tarefa.descricao}}
-                            <!-- <span class="tags has-addons">
-                                <span class="tag">Colors</span>
-                                <span class="tag is-danger">No</span>
-                            </span> -->
+                            <span class="tag is-success" v-if="tarefa.prioridade == 3">Baixa</span> 
+                            <span class="tag is-warning" v-if="tarefa.prioridade == 2">Média</span> 
+                            <span class="tag is-danger" v-if="tarefa.prioridade == 1">Alta</span> 
+                            {{tarefa.descricao}}                            
                         </p>
                         <p class="control">
                             <a class="button is-info is-small" @click="edit(index)">
@@ -46,9 +40,6 @@ export default {
         return {}
     },
     methods: {
-        check(index) {
-            this.$emit('check', index)
-        },
         edit(index) {
             this.$emit('edit', index)
         },

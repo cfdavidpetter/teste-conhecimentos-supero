@@ -12,7 +12,7 @@ class Tarefa {
 
     public function findAll()
     {
-        $statement = "SELECT * FROM tarefas ORDER BY prioridade DESC;";
+        $statement = "SELECT * FROM tarefas ORDER BY prioridade;";
 
         try {
             $statement = $this->db->query($statement);
@@ -46,9 +46,9 @@ class Tarefa {
     {
         $statement = "
             INSERT INTO tarefas
-                (titulo, descricao)
+                (titulo, descricao, prioridade)
             VALUES
-                (:titulo, :descricao);
+                (:titulo, :descricao, :prioridade);
         ";
 
         try {
@@ -57,6 +57,7 @@ class Tarefa {
             $result = $statement->execute(array(
                 'titulo' => $input['titulo'],
                 'descricao'  => $input['descricao'],
+                'prioridade'  => $input['prioridade'],
             ));
 
             return $this->find($this->db->lastInsertId());
@@ -72,7 +73,8 @@ class Tarefa {
             UPDATE tarefas
             SET
                 titulo = :titulo,
-                descricao  = :descricao
+                descricao  = :descricao,
+                prioridade = :prioridade
             WHERE id = :id;
         ";
 
@@ -82,6 +84,7 @@ class Tarefa {
                 'id' => (int) $id,
                 'titulo' => $input['titulo'],
                 'descricao'  => $input['descricao'],
+                'prioridade'  => $input['prioridade'],
             ));
             
             return $this->find($id);

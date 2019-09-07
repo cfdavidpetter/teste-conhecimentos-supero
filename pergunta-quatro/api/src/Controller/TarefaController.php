@@ -130,6 +130,10 @@ class TarefaController {
             return false;
         }
 
+        if (!isset($input['prioridade'])) {
+            return false;
+        }
+
         if (trim($input['titulo']) == '' || trim($input['descricao']) == '') {
             return false;
         }

@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <div class="columns">
-            <div class="column  is-half is-offset-one-quarter">
+            <div class="column">
                 <fieldset>
   
                     <div class="field">
@@ -13,6 +13,23 @@
                     <div class="field">
                         <div class="control">
                             <input class="input" type="email" placeholder="Descrição" v-model="descricao">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control radio-form">
+                            <label class="radio radio-baixo">
+                                <input type="radio" id="baixo" name="3" value="3" v-model="prioridade">
+                                <b>Prioridade Baixa</b>
+                            </label>
+                            <label class="radio radio-medio">
+                                <input type="radio" id="one" name="2" value="2" v-model="prioridade">
+                                <b>Prioridade Médio</b>
+                            </label>
+                            <label class="radio radio-alto">
+                                <input type="radio" id="one" name="1" value="1" v-model="prioridade">
+                                <b>Prioridade Alto</b>
+                            </label>
                         </div>
                     </div>
                     
@@ -43,15 +60,16 @@ export default {
     data () {
         return {
             titulo: '',
-            descricao: ''
+            descricao: '',
+            prioridade: 3
         }
     },
     updated: function () {
-        console.log(this.editModule);
         if (typeof this.tarefa.id !== 'undefined' && this.editModule === false) {
             this.titulo     = this.tarefa.titulo
             this.descricao  = this.tarefa.descricao
-            
+            this.prioridade  = this.tarefa.prioridade
+
             this.$emit('resetEditModule')
         }
     },
@@ -59,27 +77,30 @@ export default {
         enviarTarefa() {
             this.$emit('novaTarefa', {
                 titulo: this.titulo, 
-                descricao: this.descricao
+                descricao: this.descricao,
+                prioridade: this.prioridade
             })
 
-            this.titulo = ''
-            this.descricao = ''
+            this.resetVar()
         },
         editarTarefa(){
             this.$emit('updateTarefa', {
                 id: this.tarefa.id, 
                 titulo: this.titulo, 
-                descricao: this.descricao
+                descricao: this.descricao,
+                prioridade: this.prioridade
             })
 
-            this.titulo = ''
-            this.descricao = ''          
+            this.resetVar()
         },
         cancelTarefa(){
-            this.titulo = ''
-            this.descricao = ''
-
+            this.resetVar()
             this.$emit('cancelTarefa')
+        },
+        resetVar(){
+            this.titulo = ''
+            this.descricao = ''          
+            this.prioridade = 3
         }
     }
 }
@@ -100,5 +121,18 @@ export default {
 }
 .add-button {
     border-radius: 50%;
+}
+.radio-form {
+    padding-left: 15px;
+    opacity: 0.7;
+}
+.radio-baixo {
+    color: green;
+}
+.radio-medio {
+    color: yellow;
+}
+.radio-alto {
+    color: red;
 }
 </style>

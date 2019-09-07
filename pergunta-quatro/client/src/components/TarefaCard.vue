@@ -13,7 +13,7 @@
                 <tarefa-new 
                     :tarefa="tarefa" 
                     :editModule="editModule" 
-                    
+
                     @novaTarefa="adicionarTarefa" 
                     @updateTarefa="editTarefa" 
                     @cancelTarefa="exitEdit"
@@ -22,8 +22,7 @@
             <div class="content" :class="{'list-edit': tarefa.id}">
                 <tarefa-list 
                     :tarefas="tarefas" 
-                    
-                    @check="checkTarefa" 
+
                     @remover="removerTarefa" 
                     @edit="editFormTarefa"></tarefa-list>
             </div>
@@ -71,28 +70,25 @@ export default {
             let nova_tarefa = {
                 'titulo': tarefa.titulo, 
                 'descricao': tarefa.descricao, 
-                'checked': false
+                'prioridade': tarefa.prioridade, 
             }
 
             this.axios.post('http://localhost:8000/tarefa/', nova_tarefa)
                 .then((response) => {
                     this.tarefas.push(response.data)
+
+                    this.sortList()
                 })
                 .catch((error) => {
                     console.log(error)
                 })
         },
-        checkTarefa(index) {
-            if (this.tarefas[index]['checked'] == 'Y') {
-                this.tarefas[index]['checked'] = 'N'
-            } else {
-                this.tarefas[index]['checked'] = 'Y'
-            }
-        },
         removerTarefa(tarefa) {
             this.axios.delete('http://localhost:8000/tarefa/' + tarefa.id)
                 .then((response) => {
                     this.tarefas.splice(tarefa.index, 1)
+
+                    this.sortList()
                 })
                 .catch((error) => {
                     console.log(error)
@@ -108,8 +104,10 @@ export default {
                 .then((response) => {
                     this.tarefas[this.tarefaIndex].titulo = response.data.titulo
                     this.tarefas[this.tarefaIndex].descricao = response.data.descricao
+                    this.tarefas[this.tarefaIndex].prioridade = response.data.prioridade
                     
                     this.exitEdit()
+                    this.sortList()
                 })
                 .catch((error) => {
                     console.log(error)
@@ -122,6 +120,11 @@ export default {
         },
         waitEditModule(){
             this.editModule = true
+        },
+        sortList(){
+            this.tarefas.sort(function(a, b) {
+                return a.prioridade - b.prioridade;
+            });
         }
     }
 }
