@@ -9,11 +9,23 @@
             </div>
         </header>
         <div class="card-content">
-            <div class="content">
-                <tarefa-new @novaTarefa="adicionarTarefa"></tarefa-new>
+            <div class="content form-tarefa">
+                <tarefa-new 
+                    :tarefa="tarefa" 
+                    :editModule="editModule" 
+                    
+                    @novaTarefa="adicionarTarefa" 
+                    @updateTarefa="editTarefa" 
+                    @cancelTarefa="exitEdit"
+                    @resetEditModule="waitEditModule"></tarefa-new>
             </div>
-            <div class="content">
-                <tarefa-list :tarefas="tarefas" @check="checkTarefa" @remover="removerTarefa"></tarefa-list>
+            <div class="content" :class="{'list-edit': tarefa.id}">
+                <tarefa-list 
+                    :tarefas="tarefas" 
+                    
+                    @check="checkTarefa" 
+                    @remover="removerTarefa" 
+                    @edit="editFormTarefa"></tarefa-list>
             </div>
         </div>
     </div>
@@ -33,7 +45,10 @@ export default {
         return {
             dias: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
             meses: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-            tarefas: []
+            tarefas: [],
+            tarefa: {},
+            editModule: false,
+            tarefaIndex: false,
         }
     },
     mounted() {
@@ -53,10 +68,15 @@ export default {
     },
     methods: {
         adicionarTarefa(tarefa) {
-            let nova_tarefa = {'titulo': tarefa.titulo, 'descricao': tarefa.descricao, 'checked': false}
+            let nova_tarefa = {
+                'titulo': tarefa.titulo, 
+                'descricao': tarefa.descricao, 
+                'checked': false
+            }
+
             this.axios.post('http://localhost:8000/tarefa/', nova_tarefa)
                 .then((response) => {
-                    this.tarefas.push(nova_tarefa)
+                    this.tarefas.push(response.data)
                 })
                 .catch((error) => {
                     console.log(error)
@@ -69,8 +89,7 @@ export default {
                 this.tarefas[index]['checked'] = 'Y'
             }
         },
-        removerTarefa(tarefa){
-            console.log(tarefa);
+        removerTarefa(tarefa) {
             this.axios.delete('http://localhost:8000/tarefa/' + tarefa.id)
                 .then((response) => {
                     this.tarefas.splice(tarefa.index, 1)
@@ -78,6 +97,31 @@ export default {
                 .catch((error) => {
                     console.log(error)
                 })
+        },
+        editFormTarefa(index) {
+            this.tarefa = this.tarefas[index]
+            this.tarefaIndex = index
+            this.editModule = false
+        },
+        editTarefa(upTarefa) {            
+            this.axios.put('http://localhost:8000/tarefa/' + upTarefa.id, upTarefa)
+                .then((response) => {
+                    this.tarefas[this.tarefaIndex].titulo = response.data.titulo
+                    this.tarefas[this.tarefaIndex].descricao = response.data.descricao
+                    
+                    this.exitEdit()
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        },
+        exitEdit() {
+            this.tarefa = {}
+            this.tarefaIndex = false
+            this.editModule = true
+        },
+        waitEditModule(){
+            this.editModule = true
         }
     }
 }
@@ -89,5 +133,11 @@ export default {
 }
 .card-header-title {
     color: #636368;
+}
+.form-tarefa {
+    box-shadow: 0 1px 2px rgba(10, 10, 10, 0.1);
+}
+.list-edit {
+    display: none;
 }
 </style>

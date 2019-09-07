@@ -80,10 +80,10 @@ class TarefaController {
             return $this->unprocessableEntityResponse();
         }
 
-        $this->tarefa->insert($input);
+        $result = $this->tarefa->insert($input);
 
         $response['status_code_header'] = 'HTTP/1.1 201 Created';
-        $response['body'] = null;
+        $response['body'] = json_encode($result[0]);
         return $response;
     }
 
@@ -99,10 +99,10 @@ class TarefaController {
             return $this->unprocessableEntityResponse();
         }
 
-        $this->tarefa->update($id, $input);
+        $result = $this->tarefa->update($id, $input);
 
         $response['status_code_header'] = 'HTTP/1.1 200 OK';
-        $response['body'] = null;
+        $response['body'] = json_encode($result[0]);
         return $response;
     }
 

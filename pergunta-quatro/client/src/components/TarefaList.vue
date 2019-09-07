@@ -13,8 +13,17 @@
                             <b>{{tarefa.titulo}}</b>
                             <br>
                             {{tarefa.descricao}}
+                            <!-- <span class="tags has-addons">
+                                <span class="tag">Colors</span>
+                                <span class="tag is-danger">No</span>
+                            </span> -->
                         </p>
                         <p class="control">
+                            <a class="button is-info is-small" @click="edit(index)">
+                                <span class="icon is-small">
+                                    <i class="fa fa-edit"></i>
+                                </span>
+                            </a>
                             <a class="button is-danger is-small" @click="remover(index, tarefa.id)">
                                 <span class="icon is-small">
                                     <i class="fa fa-trash"></i>
@@ -40,8 +49,14 @@ export default {
         check(index) {
             this.$emit('check', index)
         },
+        edit(index) {
+            this.$emit('edit', index)
+        },
         remover(indexArray, idTarefa) {
-            this.$emit('remover', {index: indexArray, id: idTarefa})
+            this.$emit('remover', {
+                index: indexArray, 
+                id: idTarefa
+            })
         }
     }
 }

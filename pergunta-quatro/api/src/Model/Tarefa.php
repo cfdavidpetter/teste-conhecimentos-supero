@@ -12,7 +12,7 @@ class Tarefa {
 
     public function findAll()
     {
-        $statement = "SELECT * FROM tarefas;";
+        $statement = "SELECT * FROM tarefas ORDER BY prioridade DESC;";
 
         try {
             $statement = $this->db->query($statement);
@@ -54,12 +54,12 @@ class Tarefa {
         try {
 
             $statement = $this->db->prepare($statement);
-            $statement->execute(array(
+            $result = $statement->execute(array(
                 'titulo' => $input['titulo'],
                 'descricao'  => $input['descricao'],
             ));
 
-            return $statement->rowCount();
+            return $this->find($this->db->lastInsertId());
         } catch (\PDOException $e) {
 
             exit($e->getMessage());
@@ -83,8 +83,8 @@ class Tarefa {
                 'titulo' => $input['titulo'],
                 'descricao'  => $input['descricao'],
             ));
-
-            return $statement->rowCount();
+            
+            return $this->find($id);
         } catch (\PDOException $e) {
 
             exit($e->getMessage());
